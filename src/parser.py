@@ -16,5 +16,10 @@ parser.add_argument('--path', help='Recebe caminho absoluto para o arquivo de te
 args = parser.parse_args()
 
 for line in args.path.readlines():
-	matched = map(lambda pattern: re.match(pattern, line).group(), patterns)
-	print(matched)
+	for pattern in patterns:
+		matched = re.match(pattern, line)
+		if matched:
+			btArr = bytearray(str(matched.groups()), encoding='utf-8')
+			print('encoded: ', btArr)
+			print('decoded: ', btArr.decode('utf-8', errors='ignore'))
+		print(matched.groups() if matched else None)
