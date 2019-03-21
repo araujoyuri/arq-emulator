@@ -1,12 +1,12 @@
 import argparse
 import re
+from bus import Bus
 
 patterns = [
     r'(mov)\s*(\w+),\s*(\d+)',
-    r'(mov)\s*(0x\d+),\s*(\w+)',
     r'(add)\s*(\w+),\s*(\w+)',
-    r'(inc)\s*(0x\d+)',
-    r'(imul)\s*(\w+),\s*(0x\d+),\s+(\d+)'
+    r'(inc)\s*(\w+)',
+    r'(imul)\s*(\w+),\s*(\w+),\s*(\d+)'
 ]
 
 parser = argparse.ArgumentParser(description='Lê comandos assembly de arquivo')
@@ -18,22 +18,24 @@ parser.add_argument('--command',
 
 args = parser.parse_args()
 
-print(args.command)
-
 if args.command:
     for pattern in patterns:
         matched = re.match(pattern, args.command)
         if matched:
+            print('\n', matched.groups())
             btArr = bytearray(str(matched.groups()), encoding='utf-8')
             print('encoded: ', btArr)
-            print('decoded: ', btArr.decode('utf-8', errors='ignore'))
+            print('decoded: ', btArr.decode('utf-8', errors='ignore'), '\n')
 
 elif args.path:
     for line in args.path.readlines():
         for pattern in patterns:
             matched = re.match(pattern, line)
             if matched:
+                print('\n', matched.groups())
                 btArr = bytearray(str(matched.groups()), encoding='utf-8')
                 print('encoded: ', btArr)
                 print('decoded: ', btArr.decode('utf-8', errors='ignore'))
-            print(matched.groups() if matched else None)
+                bus = Bus()
+                bus.payload = btArr
+                bus.send_to_ram()
