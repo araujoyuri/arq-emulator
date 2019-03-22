@@ -7,7 +7,8 @@ patterns = [
     r'(mov)\s*(\w+),\s*(\w+)',
     r'(add)\s*(\w+),\s*(\w+)',
     r'(inc)\s*(\w+)',
-    r'(imul)\s*(\w+),\s*(\w+),\s*(\w+)'
+    r'(imul)\s*(\w+),\s*(\w+),\s*(\w+)',
+    r'(imul)\s*(\w+),\s*(\w+)'
 ]
 
 parser = argparse.ArgumentParser(description='Lê comandos assembly de arquivo')

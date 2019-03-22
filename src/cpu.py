@@ -97,57 +97,55 @@ class CPU:
         if reg not in cls.proc_register:
             cls.proc_register[reg] = 0
 
-        if reg_mult1 in string.ascii_uppercase and reg_mult2 in \
-                string.ascii_uppercase:
-            if reg_mult1 not in cls.proc_register:
-                cls.proc_register[reg_mult1] = 0
+        if reg_mult2:
+            if reg_mult1 in string.ascii_uppercase and reg_mult2 in \
+                    string.ascii_uppercase:
+                if reg_mult1 not in cls.proc_register:
+                    cls.proc_register[reg_mult1] = 0
 
-            if reg_mult2 not in cls.proc_register:
-                cls.proc_register[reg_mult2] = 0
+                if reg_mult2 not in cls.proc_register:
+                    cls.proc_register[reg_mult2] = 0
 
-            cls.proc_register[reg] = int(cls.proc_register[reg_mult1]) * \
-                                     int(cls.proc_register[reg_mult2])
-            print('### Registradores ###')
-            print(reg + ':', str(cls.proc_register[reg]))
-            print(reg_mult1 + ':', str(cls.proc_register[reg_mult1]))
-            print(reg_mult2 + ':', str(cls.proc_register[reg_mult2]))
-            return
+                cls.proc_register[reg] = int(cls.proc_register[reg_mult1]) * \
+                                         int(cls.proc_register[reg_mult2])
+                print('### Registradores ###')
+                print(reg + ':', str(cls.proc_register[reg]))
+                print(reg_mult1 + ':', str(cls.proc_register[reg_mult1]))
+                print(reg_mult2 + ':', str(cls.proc_register[reg_mult2]))
+                return
 
-        elif reg_mult1 in string.ascii_uppercase and reg_mult2 not in \
-                string.ascii_uppercase:
-            if reg_mult1 not in cls.proc_register:
-                cls.proc_register[reg_mult1] = 0
+            elif reg_mult1 in string.ascii_uppercase and reg_mult2 not in \
+                    string.ascii_uppercase:
+                if reg_mult1 not in cls.proc_register:
+                    cls.proc_register[reg_mult1] = 0
 
-            cls.proc_register[reg] = int(cls.proc_register[reg_mult1]) * int(reg_mult2)
-            print('### Registradores ###')
-            print(reg + ':', str(cls.proc_register[reg]))
-            print(reg_mult1 + ':', str(cls.proc_register[reg_mult1]))
-            return
+                cls.proc_register[reg] = int(
+                    cls.proc_register[reg_mult1]) * int(reg_mult2)
+                print('### Registradores ###')
+                print(reg + ':', str(cls.proc_register[reg]))
+                print(reg_mult1 + ':', str(cls.proc_register[reg_mult1]))
+                return
 
-        elif reg_mult1 not in string.ascii_uppercase and reg_mult2 in \
-                string.ascii_uppercase:
-            if reg_mult2 not in cls.proc_register:
-                cls.proc_register[reg_mult2] = 0
+            elif reg_mult1 not in string.ascii_uppercase and reg_mult2 in \
+                    string.ascii_uppercase:
+                if reg_mult2 not in cls.proc_register:
+                    cls.proc_register[reg_mult2] = 0
 
-            cls.proc_register[reg] = int(reg_mult1) * int(cls.proc_register[reg_mult2])
-            print('### Registradores ###')
-            print(reg + ':', str(cls.proc_register[reg]))
-            print(reg_mult2 + ':', str(cls.proc_register[reg_mult2]))
-            return
+                cls.proc_register[reg] = int(reg_mult1) * int(
+                    cls.proc_register[reg_mult2])
+                print('### Registradores ###')
+                print(reg + ':', str(cls.proc_register[reg]))
+                print(reg_mult2 + ':', str(cls.proc_register[reg_mult2]))
+                return
 
-        elif reg_mult1 not in string.ascii_uppercase and reg_mult2 not in \
-                string.ascii_uppercase:
-            cls.proc_register[reg] = int(reg_mult1) * int(reg_mult2)
-            print('### Registradores ###')
-            print(reg + ':', str(cls.proc_register[reg]))
-            return
+            elif reg_mult1 not in string.ascii_uppercase and reg_mult2 not in \
+                    string.ascii_uppercase:
+                cls.proc_register[reg] = int(reg_mult1) * int(reg_mult2)
+                print('### Registradores ###')
+                print(reg + ':', str(cls.proc_register[reg]))
+                return
 
-        if reg_mult1.isDigit():
-            cls.proc_register[reg] *= int(reg_mult1)
-            print('### Registradores ###')
-            print(reg + ':', str(cls.proc_register[reg]))
-
-        else:
+        if reg_mult1 in string.ascii_uppercase:
             if reg_mult1 not in cls.proc_register:
                 cls.proc_register[reg_mult1] = 0
 
@@ -156,3 +154,7 @@ class CPU:
             print(reg + ':', str(cls.proc_register[reg]))
             print(reg_mult1 + ':', str(cls.proc_register[reg_mult1]))
             return
+        else:
+            cls.proc_register[reg] *= int(reg_mult1)
+            print('### Registradores ###')
+            print(reg + ':', str(cls.proc_register[reg]))
