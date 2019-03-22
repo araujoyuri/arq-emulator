@@ -138,6 +138,8 @@ class CPU:
         elif reg_mult1 not in string.ascii_uppercase and reg_mult2 not in \
                 string.ascii_uppercase:
             cls.proc_register[reg] = int(reg_mult1) * int(reg_mult2)
+            print('### Registradores ###')
+            print(reg + ':', str(cls.proc_register[reg]))
             return
 
         if reg_mult1.isDigit():
