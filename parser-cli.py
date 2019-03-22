@@ -1,12 +1,13 @@
+from src.read_write import ReadWrite
+from config import _arch
 import argparse
 import re
-from bus import Bus
 
 patterns = [
-    r'(mov)\s*(\w+),\s*(\d+)',
+    r'(mov)\s*(\w+),\s*(\w+)',
     r'(add)\s*(\w+),\s*(\w+)',
     r'(inc)\s*(\w+)',
-    r'(imul)\s*(\w+),\s*(\w+),\s*(\d+)'
+    r'(imul)\s*(\w+),\s*(\w+),\s*(\w+)'
 ]
 
 parser = argparse.ArgumentParser(description='Lê comandos assembly de arquivo')
@@ -26,6 +27,8 @@ if args.command:
             btArr = bytearray(str(matched.groups()), encoding='utf-8')
             print('encoded: ', btArr)
             print('decoded: ', btArr.decode('utf-8', errors='ignore'), '\n')
+            rw = ReadWrite()
+            rw.save_instruction(btArr, size=_arch)
 
 elif args.path:
     for line in args.path.readlines():
@@ -36,6 +39,5 @@ elif args.path:
                 btArr = bytearray(str(matched.groups()), encoding='utf-8')
                 print('encoded: ', btArr)
                 print('decoded: ', btArr.decode('utf-8', errors='ignore'))
-                bus = Bus()
-                bus.payload = btArr
-                bus.send_to_ram()
+                rw = ReadWrite()
+                rw.save_instruction(btArr, size=_arch)

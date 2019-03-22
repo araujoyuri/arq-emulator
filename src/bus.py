@@ -1,12 +1,18 @@
-from ram import Ram
-import string
-import random
+from src.ram import Ram
+from src.cpu import CPU
 
 
 class Bus:
-    payload: bytearray
 
-    def send_to_ram(self):
+    @staticmethod
+    def send_to_ram(address, payload, size):
+        Ram.keep_instruction(address, payload, size)
+        Bus.send_interruption(address, size)
 
-        Ram.keep_instruction(instruct=self.payload,
-                             address=random.choice(string.ascii_uppercase))
+    @staticmethod
+    def send_interruption(address, size):
+        CPU.receive_interruption(address, size)
+
+    @staticmethod
+    def fetch_from_ram(address, size):
+        return Ram.get_from_address(address, size)
