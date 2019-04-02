@@ -7,7 +7,6 @@ class Bus:
     @staticmethod
     def send_to_ram(address, payload, size):
         Ram.keep_instruction(address, payload, size)
-        Bus.send_interruption(address, size)
 
     @staticmethod
     def send_interruption(address, size):

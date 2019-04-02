@@ -12,3 +12,4 @@ class ReadWrite:
         b = Bus()
         address = random.choice(string.ascii_uppercase) + str(random.randint(0, 9))
         b.send_to_ram(address, cls.instruction, size)
+        b.send_interruption(address, size)
