@@ -1,39 +1,46 @@
 import string
+import time
+from config import get_clock, get_bus_size
 
 
 class CPU:
     proc_register: dict = {}
 
     @staticmethod
-    def receive_interruption(address, size):
-        CPU.ask_for_ram(address, size)
+    def receive_interruption(address, control):
+        CPU.ask_for_ram(address, control)
 
     @staticmethod
-    def ask_for_ram(address, size):
+    def ask_for_ram(address, control):
         from src.bus import Bus
-        addr = Bus.fetch_from_ram(address, size)
-        CPU.process_instruction(addr['instruction'], addr['size'])
+        print('cpu address: ', address)
+        addr = Bus.fetch_from_ram(address, control)
+        CPU.process_instruction(addr['instruction'])
+        time.sleep(0.1)
 
     @staticmethod
-    def process_instruction(instruction, size):
-        decoded_instruction = instruction.decode('utf-8')\
-            .replace('(', '').replace(')', '').replace(' ', '')\
-            .replace("'", '').split(',')
-        if decoded_instruction[0] == 'add':
-            CPU.add_op(decoded_instruction[1], decoded_instruction[2])
-        elif decoded_instruction[0] == 'mov':
-            CPU.mov_op(decoded_instruction[1], decoded_instruction[2])
-        elif decoded_instruction[0] == 'inc':
-            CPU.inc_op(decoded_instruction[1])
-        elif decoded_instruction[0] == 'imul':
-            if len(decoded_instruction) == 3:
-                CPU.imul_op(decoded_instruction[1], decoded_instruction[2])
-            elif len(decoded_instruction) == 4:
-                CPU.imul_op(decoded_instruction[1],
-                            decoded_instruction[2],
-                            decoded_instruction[3])
-            else:
-                print('Comando mal formatado')
+    def process_instruction(instruction):
+        pulse_per_clock = int(get_clock() / get_bus_size())
+        print('pulsos: ', pulse_per_clock)
+
+        for value in range(1, pulse_per_clock + 1):
+            decoded_instruction = [p.decode('utf-8') for p in instruction]
+            print('decoded instruction: ', decoded_instruction)
+            if decoded_instruction[0] == 'add':
+                CPU.add_op(decoded_instruction[1], decoded_instruction[2])
+            elif decoded_instruction[0] == 'mov':
+                CPU.mov_op(decoded_instruction[1], decoded_instruction[2])
+            elif decoded_instruction[0] == 'inc':
+                CPU.inc_op(decoded_instruction[1])
+            elif decoded_instruction[0] == 'imul':
+                if len(decoded_instruction) == 3:
+                    CPU.imul_op(decoded_instruction[1], decoded_instruction[2])
+                elif len(decoded_instruction) == 4:
+                    CPU.imul_op(decoded_instruction[1],
+                                decoded_instruction[2],
+                                decoded_instruction[3])
+                else:
+                    print('Comando mal formatado')
 
     @classmethod
     def add_op(cls, reg, val):

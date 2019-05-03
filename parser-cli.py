@@ -1,5 +1,5 @@
 from src.read_write import ReadWrite
-from config import _arch
+from config import get_bus_size, get_arch
 import argparse
 import re
 
@@ -24,21 +24,25 @@ if args.command:
     for pattern in patterns:
         matched = re.match(pattern, args.command)
         if matched:
+            for p in matched.groups():
+                print('Palavra maior que o tamanho do barramento') if \
+                    len(p) > get_bus_size() else None
+            bytes_list = [x.encode('utf-8') for x in matched.groups()]
             print('\n', matched.groups())
-            btArr = bytearray(str(matched.groups()), encoding='utf-8')
-            print('encoded: ', btArr)
-            print('decoded: ', btArr.decode('utf-8', errors='ignore'), '\n')
+            print('encoded: ', bytes_list)
             rw = ReadWrite()
-            rw.save_instruction(btArr, size=_arch)
+            rw.save_instruction(bytes_list)
 
 elif args.path:
     for line in args.path.readlines():
         for pattern in patterns:
             matched = re.match(pattern, line)
             if matched:
+                for p in matched.groups():
+                    print('Palavra maior que o tamanho do barramento') if \
+                        len(p) > get_bus_size() else None
+                bytes_list = [x.encode('utf-8') for x in matched.groups()]
                 print('\n', matched.groups())
-                btArr = bytearray(str(matched.groups()), encoding='utf-8')
-                print('encoded: ', btArr)
-                print('decoded: ', btArr.decode('utf-8', errors='ignore'))
+                print('encoded: ', bytes_list)
                 rw = ReadWrite()
-                rw.save_instruction(btArr, size=_arch)
+                rw.save_instruction(bytes_list)

@@ -1,16 +1,15 @@
 
 
 class Ram:
-    addresses: dict = {}
+    addresses: list = []
 
     @classmethod
-    def keep_instruction(cls, address: str, instruct: bytearray, size: int):
+    def keep_instruction(cls, address: list, instruct: list, control: int):
         print('ram address: ', address)
-        cls.addresses[address] = {
-            'instruction': instruct,
-            'size': size
-        }
+        print('control: ', control)
+        cls.addresses.insert(control, {'address': address,
+                                       'instruction': instruct})
 
     @classmethod
-    def get_from_address(cls, address, size):
-        return cls.addresses[address]
+    def get_from_address(cls, address, control):
+        return cls.addresses[control]
