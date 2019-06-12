@@ -5,10 +5,12 @@ from config import get_clock, get_bus_size
 
 class CPU:
     proc_register: dict = {}
+    cache: list = []
 
-    @staticmethod
-    def receive_interruption(address, control):
-        CPU.ask_for_ram(address, control)
+    @classmethod
+    def receive_interruption(cls, address, control):
+        print('cache: ', cls.cache)
+        CPU.check_cache(address, control)
 
     @staticmethod
     def ask_for_ram(address, control):
@@ -17,6 +19,34 @@ class CPU:
         addr = Bus.fetch_from_ram(address, control)
         CPU.process_instruction(addr['instruction'])
         time.sleep(0.1)
+
+    @classmethod
+    def lfu(cls):
+        from src.bus import Bus
+        smallest_timestamp = {
+            'timestamp': 9999999999999999
+        }
+        for instruct in cls.cache:
+            if instruct['timestamp'] < smallest_timestamp['timestamp']:
+                smallest_timestamp = instruct
+
+        Bus.update_ram(smallest_timestamp['address'], smallest_timestamp)
+
+        index = cls.cache.index(smallest_timestamp)
+        del cls.cache[index]
+
+    @classmethod
+    def check_cache(cls, ram_address, control):
+        instruction = next((instruct for instruct in cls.cache if ram_address in cls.cache), None)
+        if instruction:
+            return instruction
+        else:
+            from src.bus import Bus
+            instruction = Bus.fetch_from_ram(ram_address, control)
+            if len(cls.cache) >= 10:
+                cls.lfu()
+            cls.cache.append({ram_address: instruction, 'timestamp': time.time()})
+            return instruction
 
     @staticmethod
     def process_instruction(instruction):

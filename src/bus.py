@@ -12,6 +12,10 @@ class Bus:
         Ram.keep_instruction(cls.address_bus[0], cls.data_bus[0], control)
 
     @classmethod
+    def update_ram(cls, address, instruction):
+        Ram.update_address(address, instruction)
+
+    @classmethod
     def set_data_bus(cls, payload, control):
         cls.data_bus.insert(control, payload)
 

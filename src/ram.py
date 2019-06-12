@@ -13,3 +13,7 @@ class Ram:
     @classmethod
     def get_from_address(cls, address, control):
         return cls.addresses[control]
+
+    @classmethod
+    def update_address(cls, address, instruction):
+        cls.addresses[address] = instruction
